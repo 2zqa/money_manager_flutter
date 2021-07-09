@@ -26,43 +26,28 @@ void main() {
   runApp(MoneyManagerApp());
 }
 
-class BalanceItemCard extends StatefulWidget {
-  const BalanceItemCard({Key? key}) : super(key: key);
+class BalanceItemCard extends StatelessWidget {
+  final BalanceItem balanceItem;
 
-  @override
-  _BalanceItemCardState createState() => _BalanceItemCardState();
-}
+  const BalanceItemCard(this.balanceItem, {Key? key}) : super(key: key);
 
-class _BalanceItemCardState extends State<BalanceItemCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          const ListTile(
-            leading: Icon(Icons.album),
-            title: Text('The Enchanted Nightingale'),
-            subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              TextButton(
-                child: const Text('BUY TICKETS'),
-                onPressed: () {/* ... */},
+        child: InkWell(
+            splashColor: Theme.of(context).colorScheme.primary.withAlpha(30),
+            onTap: () {
+              print('Card tapped.');
+            },
+            child: ListTile(
+              leading: Icon(
+                this.balanceItem is Income
+                    ? Icons.arrow_upward
+                    : Icons.arrow_downward,
               ),
-              const SizedBox(width: 8),
-              TextButton(
-                child: const Text('LISTEN'),
-                onPressed: () {/* ... */},
-              ),
-              const SizedBox(width: 8),
-            ],
-          ),
-        ],
-      ),
-    );
+              title: Text(this.balanceItem.name),
+              subtitle: Text((this.balanceItem.cost / 100).toString()),
+            )));
   }
 }
 
@@ -93,11 +78,16 @@ class OverviewPage extends StatelessWidget {
           title: Text(title),
         ),
         body: ListView(
+          padding: EdgeInsets.all(8.0),
           children: <Widget>[
             HeadingItem(heading: "Expenses"),
-            BalanceItemCard(), // TODO: replace single card with list, add heading to list including header argument
+            BalanceItemCard(Expense(
+                "Spotify",
+                250,
+                RecurringType
+                    .daily)), // TODO: replace single card with list, add heading to list including header argument
             HeadingItem(heading: "Income"),
-            BalanceItemCard()
+            BalanceItemCard(Income("Salaris", 30000, RecurringType.monthly))
           ],
         ),
         floatingActionButton: FloatingActionButton(
