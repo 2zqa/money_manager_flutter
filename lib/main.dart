@@ -3,12 +3,22 @@ import 'package:flutter/material.dart';
 // Logic
 enum RecurringType { daily, weekly, fortnightly, monthly, yearly }
 
-class BalanceItem {
+abstract class BalanceItem {
   String name;
   int cost;
   RecurringType recurringType;
 
   BalanceItem(this.name, this.cost, this.recurringType);
+}
+
+class Expense extends BalanceItem {
+  Expense(String name, int cost, RecurringType recurringType)
+      : super(name, cost, recurringType);
+}
+
+class Income extends BalanceItem {
+  Income(String name, int cost, RecurringType recurringType)
+      : super(name, cost, recurringType);
 }
 
 // App
