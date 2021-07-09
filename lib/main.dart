@@ -36,20 +36,24 @@ class BalanceItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        child: InkWell(
-            splashColor: Theme.of(context).colorScheme.primary.withAlpha(30),
-            onTap: () {
-              print('Card tapped.');
-            },
-            child: ListTile(
-              leading: Icon(
-                this.balanceItem is Income
-                    ? Icons.arrow_upward
-                    : Icons.arrow_downward,
-              ),
-              title: Text(this.balanceItem.name),
-              subtitle: Text((this.balanceItem.cost / 100).toString()),
-            )));
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        highlightColor: Colors.transparent,
+        splashColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
+        onTap: () {
+          print('Card tapped.');
+        },
+        child: ListTile(
+          leading: Icon(
+            this.balanceItem is Income
+                ? Icons.arrow_upward
+                : Icons.arrow_downward,
+          ),
+          title: Text(this.balanceItem.name),
+          subtitle: Text((this.balanceItem.cost / 100).toString()),
+        ),
+      ),
+    );
   }
 }
 
