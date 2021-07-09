@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'new_balance_item.dart';
 
 // Logic
 enum RecurringType { daily, weekly, fortnightly, monthly, yearly }
@@ -91,7 +92,12 @@ class OverviewPage extends StatelessWidget {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SecondRoute()),
+            );
+          },
           tooltip: 'Increment',
           child: Icon(Icons.add),
         ));
