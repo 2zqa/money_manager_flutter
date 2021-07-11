@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:money_manager_flutter/pages/new_balance_item.dart';
 
 import '../widgets/balance_item.dart';
 import '../widgets/transition_widget.dart';
@@ -27,8 +28,10 @@ class OverviewRoute extends StatelessWidget {
           BalanceItemCard(Income("Salaris", 30000, RecurringType.monthly))
         ],
       ),
-      floatingActionButton:
-          CreateNewBalanceItemCardFAB(transitionType: transitionType),
+      floatingActionButton: CreateNewBalanceItemCardFAB(
+        transitionType: transitionType,
+        route: NewBalanceItemRoute(),
+      ),
     );
   }
 }
