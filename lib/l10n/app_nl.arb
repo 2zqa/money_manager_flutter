@@ -5,5 +5,8 @@
   "newBalanceItemTitle": "Nieuw item",
   "balanceItemName": "Naam",
   "balanceItemAmount": "Hoeveelheid",
-  "addBalanceItem": "VOEG TOE"
+  "addBalanceItem": "VOEG TOE",
+  "incomeItemNamePlaceholder": "Salaris",
+  "requiredFieldError": "Dit is een vereist veld",
+  "balanceItemAmountError": "Vul alsjeblieft een geldige hoeveelheid geld in"
 }

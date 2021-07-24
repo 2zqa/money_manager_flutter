@@ -26,6 +26,21 @@
   "addBalanceItem": "ADD",
   "@addBalanceItem": {
     "description": "Button label for adding the balance item to the overview"
+  },
+  "expenseItemNamePlaceholder": "Spotify",
+  "@expenseItemNamePlaceholder": {
+    "description": "Placeholder example for an expense item"
+  },
+  "incomeItemNamePlaceholder": "Salary",
+  "@incomeItemNamePlaceholder": {
+    "description": "Placeholder example for an income item"
+  },
+  "balanceItemAmountError": "Please enter a valid amount of money",
+  "@balanceItemAmountError": {
+    "description": "Error message when entering an invalid amount of money"
+  },
+  "requiredFieldError": "This is a required field",
+  "@requiredFieldError": {
+    "description": "Generic label for when a field is required"
   }
-
 }

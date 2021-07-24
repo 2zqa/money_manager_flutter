@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
 class NewBalanceItemForm extends StatefulWidget {
   @override
@@ -7,34 +9,80 @@ class NewBalanceItemForm extends StatefulWidget {
   }
 }
 
-// Define a corresponding State class.
-// This class holds data related to the form.
 class NewBalanceItemFormState extends State<NewBalanceItemForm> {
   final _formKey = GlobalKey<FormState>();
 
+  String _getCurrency(String locale) =>
+      NumberFormat.compactSimpleCurrency(locale: locale).currencyName ?? "";
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16), // TODO check material spec for padding
+    AppLocalizations? al = AppLocalizations.of(context);
+    String languageTag = Localizations.localeOf(context).toLanguageTag();
+    NumberFormat placeholderFormatter = NumberFormat("#,##0.00", languageTag);
+    // Use wrap so spacing is available
+    return Form(
+      key: _formKey,
       child: Wrap(
-        // Use wrap so spacing is available
         spacing: 20,
         runSpacing: 20,
         children: <Widget>[
+          // Name
           TextFormField(
-            decoration: const InputDecoration(
-              labelText: "Name",
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return al!.requiredFieldError;
+              }
+              return null;
+            },
+            decoration: InputDecoration(
+              labelText: al!.balanceItemName + "*",
+              hintText: al.expenseItemNamePlaceholder,
               filled: true,
-              border: OutlineInputBorder(),
+              border: UnderlineInputBorder(),
             ),
           ),
+          // Amount
           TextFormField(
+            validator: (value) {
+
+              // Null check
+              if (value == null || value.isEmpty) {
+                return al.requiredFieldError;
+              }
+
+              // Parse check
+              NumberFormat formatter =
+                  NumberFormat.currency(decimalDigits: 2, locale: languageTag);
+              try {
+                print(formatter.parse(value));
+              } on FormatException {
+                return al.balanceItemAmountError;
+              }
+
+              // Passed all checks, return null
+              return null;
+            },
             keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              suffixText: "Euros",
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.balanceItemAmount + "*",
+              hintText: placeholderFormatter.format(0),
               filled: true,
-              border: OutlineInputBorder(),
-              labelText: "Amount",
+              border: UnderlineInputBorder(),
+              suffixText:
+                  _getCurrency(Localizations.localeOf(context).toLanguageTag()),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  print("Done!");
+                  Navigator.pop(context);
+                }
+              },
+              child: Text(AppLocalizations.of(context)!.addBalanceItem),
             ),
           ),
         ],
@@ -46,29 +94,13 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
 class NewBalanceItemRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      initialIndex: 0,
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("New balance item"),
-          bottom: const TabBar(
-            tabs: <Widget>[
-              Tab(
-                text: "INCOME",
-              ),
-              Tab(
-                text: "EXPENSE",
-              ),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: <Widget>[
-            NewBalanceItemForm(),
-            NewBalanceItemForm(),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.newBalanceItemTitle),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: NewBalanceItemForm(),
       ),
     );
   }
