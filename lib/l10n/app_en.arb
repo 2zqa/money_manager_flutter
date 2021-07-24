@@ -1,0 +1,31 @@
+{
+  "title": "Money Manager",
+  "@title": {
+    "description": "The title of the app"
+  },
+  "expensesHeader": "Expenses",
+  "@expensesHeader": {
+    "description": "The header for expenses part on the overview screen"
+  },
+  "incomeHeader": "Income",
+  "@incomeHeader": {
+    "description": "The header for income part on the overview screen"
+  },
+  "newBalanceItemTitle": "New item",
+  "@newBalanceItemTitle": {
+    "description": "AppBar title when adding a new balance item"
+  },
+  "balanceItemName": "Name",
+  "@balanceItemName": {
+    "description": "The name label of the balance item"
+  },
+  "balanceItemAmount": "Amount",
+  "@balanceItemAmount": {
+    "description": "The label for the amount of money the balance item costs or is worth"
+  },
+  "addBalanceItem": "ADD",
+  "@addBalanceItem": {
+    "description": "Button label for adding the balance item to the overview"
+  }
+
+}

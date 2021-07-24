@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'pages/overview.dart';
 
@@ -7,16 +8,17 @@ void main() {
 }
 
 class MoneyManagerApp extends StatelessWidget {
-  final String appName = "Money Manager";
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: appName,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.title,
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: OverviewRoute(title: appName),
+      home: OverviewRoute(),
     );
   }
 }

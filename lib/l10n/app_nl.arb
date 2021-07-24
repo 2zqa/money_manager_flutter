@@ -1,0 +1,9 @@
+{
+  "title": "Geldbeheer",
+  "expensesHeader": "Uitgaven",
+  "incomeHeader": "Inkomsten",
+  "newBalanceItemTitle": "Nieuw item",
+  "balanceItemName": "Naam",
+  "balanceItemAmount": "Hoeveelheid",
+  "addBalanceItem": "VOEG TOE"
+}
