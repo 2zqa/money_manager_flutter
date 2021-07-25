@@ -36,6 +36,8 @@ class OverviewRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // Statusbar fix: https://stackoverflow.com/questions/66511420/why-my-status-bar-icons-are-black-and-why-cant-i-change-it-after-flutter-2-0
+        brightness: Brightness.dark,
         title: Text(AppLocalizations.of(context)!.title),
       ),
       body: ListView(
