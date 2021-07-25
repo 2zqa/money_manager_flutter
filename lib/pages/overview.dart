@@ -40,24 +40,30 @@ class OverviewRoute extends StatelessWidget {
         brightness: Brightness.dark,
         title: Text(AppLocalizations.of(context)!.title),
       ),
-      body: ListView(
-        padding: EdgeInsets.all(8.0),
-        children: <Widget>[
-          HeadingItem(heading: AppLocalizations.of(context)!.expensesHeader),
-          BalanceItemList(
-            balanceItemList: [
-              Expense("Spotify", 250, RecurringType.monthly),
-              Expense("Reddit", 900, RecurringType.monthly),
-            ],
-          ),
-          HeadingItem(heading: AppLocalizations.of(context)!.incomeHeader),
-          BalanceItemList(
-            balanceItemList: [
-              Income("Salaris", 900001, RecurringType.monthly),
-              Income("Oma", 1000, RecurringType.yearly),
-            ],
-          ),
-        ],
+      body: Scrollbar(
+        child: ListView(
+          padding: EdgeInsets.all(8.0),
+          children: <Widget>[
+            HeadingItem(heading: AppLocalizations.of(context)!.expensesHeader),
+            BalanceItemList(
+              balanceItemList: [
+                Expense("Spotify", 250, RecurringType.monthly),
+                Expense("Reddit", 900, RecurringType.monthly),
+                Expense("Reddit", 900, RecurringType.monthly),
+                Expense("Reddit", 900, RecurringType.monthly),
+                Expense("Reddit", 900, RecurringType.monthly),
+              ],
+            ),
+            HeadingItem(heading: AppLocalizations.of(context)!.incomeHeader),
+            BalanceItemList(
+              balanceItemList: [
+                Income("Salaris", 900001, RecurringType.monthly),
+                Income("Oma", 1000, RecurringType.yearly),
+                Income("Mammie", 200, RecurringType.yearly),
+              ],
+            ),
+          ],
+        ),
       ),
       floatingActionButton: CreateNewBalanceItemCardFAB(
         transitionType: transitionType,
