@@ -6,6 +6,27 @@ import '../pages/new_balance_item.dart';
 import '../widgets/balance_item.dart';
 import '../widgets/transition_widget.dart';
 
+class BalanceItemList extends StatelessWidget {
+  final List<BalanceItem> balanceItemList;
+
+  const BalanceItemList({Key? key, required this.balanceItemList})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (var balanceItem in balanceItemList)
+          BalanceItemCard(
+            balanceItem: balanceItem,
+            localeString: Localizations.localeOf(context).toLanguageTag(),
+          ),
+      ],
+    );
+  }
+}
+
 class OverviewRoute extends StatelessWidget {
   final transitionType = ContainerTransitionType.fade;
 
@@ -21,11 +42,19 @@ class OverviewRoute extends StatelessWidget {
         padding: EdgeInsets.all(8.0),
         children: <Widget>[
           HeadingItem(heading: AppLocalizations.of(context)!.expensesHeader),
-          BalanceItemCard(
-            Expense("Spotify", 250, RecurringType.daily),
-          ), // TODO: replace single card with list, add heading to list including header argument
+          BalanceItemList(
+            balanceItemList: [
+              Expense("Spotify", 250, RecurringType.monthly),
+              Expense("Reddit", 900, RecurringType.monthly),
+            ],
+          ),
           HeadingItem(heading: AppLocalizations.of(context)!.incomeHeader),
-          BalanceItemCard(Income("Salaris", 30000, RecurringType.monthly))
+          BalanceItemList(
+            balanceItemList: [
+              Income("Salaris", 900001, RecurringType.monthly),
+              Income("Oma", 1000, RecurringType.yearly),
+            ],
+          ),
         ],
       ),
       floatingActionButton: CreateNewBalanceItemCardFAB(

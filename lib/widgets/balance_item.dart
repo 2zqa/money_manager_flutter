@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 // Logic
 enum RecurringType { daily, weekly, fortnightly, monthly, yearly }
@@ -34,8 +35,16 @@ class HeadingItem extends StatelessWidget {
 
 class BalanceItemCard extends StatelessWidget {
   final BalanceItem balanceItem;
+  final String localeString;
 
-  const BalanceItemCard(this.balanceItem, {Key? key}) : super(key: key);
+  String _formatMoney(String localeString, int cents) =>
+      NumberFormat.simpleCurrency(locale: localeString).format(cents / 100);
+
+  /// A visual representation of a [BalanceItem].
+  /// Therefore, it requires one (duh)
+  const BalanceItemCard(
+      {required this.balanceItem, required this.localeString, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +63,7 @@ class BalanceItemCard extends StatelessWidget {
                 : Icons.arrow_downward,
           ),
           title: Text(this.balanceItem.name),
-          subtitle: Text((this.balanceItem.cost / 100).toString()),
+          subtitle: Text(_formatMoney(localeString, balanceItem.cost)),
         ),
       ),
     );
