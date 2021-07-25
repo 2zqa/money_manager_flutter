@@ -27,7 +27,7 @@
   "@addBalanceItem": {
     "description": "Button label for adding the balance item to the overview"
   },
-  "expenseItemNamePlaceholder": "Spotify",
+  "expenseItemNamePlaceholder": "e.g. Spotify",
   "@expenseItemNamePlaceholder": {
     "description": "Placeholder example for an expense item"
   },
