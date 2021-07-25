@@ -18,6 +18,8 @@ class MoneyManagerApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.system,
       home: OverviewRoute(),
     );
   }
