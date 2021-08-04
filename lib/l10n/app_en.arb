@@ -23,6 +23,10 @@
   "@balanceItemAmount": {
     "description": "The label for the amount of money the balance item costs or is worth"
   },
+  "isExpense": "Expense",
+  "@isExpense": {
+    "description": "Checkbox label for whether the item is an expense"
+  },
   "addBalanceItem": "ADD",
   "@addBalanceItem": {
     "description": "Button label for adding the balance item to the overview"

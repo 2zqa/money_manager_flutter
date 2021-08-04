@@ -5,7 +5,9 @@
   "newBalanceItemTitle": "Nieuw item",
   "balanceItemName": "Naam",
   "balanceItemAmount": "Hoeveelheid",
+  "isExpense": "Uitgave",
   "addBalanceItem": "VOEG TOE",
+  "expenseItemNamePlaceholder": "e.g. Spotify",
   "incomeItemNamePlaceholder": "Salaris",
   "requiredFieldError": "Dit is een vereist veld",
   "balanceItemAmountError": "Vul alsjeblieft een geldige hoeveelheid geld in"

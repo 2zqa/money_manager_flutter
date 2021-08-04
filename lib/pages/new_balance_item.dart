@@ -10,6 +10,8 @@ class NewBalanceItemForm extends StatefulWidget {
 }
 
 class NewBalanceItemFormState extends State<NewBalanceItemForm> {
+  bool _isExpense = false;
+
   final _formKey = GlobalKey<FormState>();
 
   String _getCurrency(String locale) =>
@@ -17,8 +19,10 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations? al = AppLocalizations.of(context);
-    String languageTag = Localizations.localeOf(context).toLanguageTag();
+    final AppLocalizations? al = AppLocalizations.of(context);
+    final String languageTag = Localizations.localeOf(context).toLanguageTag();
+    final formatter =
+        NumberFormat.currency(decimalDigits: 2, locale: languageTag);
     NumberFormat placeholderFormatter = NumberFormat("#,##0.00", languageTag);
     // Use wrap so spacing is available
     return Form(
@@ -45,17 +49,14 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
           // Amount
           TextFormField(
             validator: (value) {
-
               // Null check
               if (value == null || value.isEmpty) {
                 return al.requiredFieldError;
               }
 
               // Parse check
-              NumberFormat formatter =
-                  NumberFormat.currency(decimalDigits: 2, locale: languageTag);
               try {
-                print(formatter.parse(value));
+                formatter.parse(value);
               } on FormatException {
                 return al.balanceItemAmountError;
               }
@@ -72,6 +73,20 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
               suffixText:
                   _getCurrency(Localizations.localeOf(context).toLanguageTag()),
             ),
+          ),
+          CheckboxListTile(
+            contentPadding: EdgeInsets.all(0),
+            title: Text(AppLocalizations.of(context)!.isExpense),
+            controlAffinity: ListTileControlAffinity.leading,
+            value: _isExpense,
+            onChanged: (newValue) {
+              if (newValue != null) {
+                // TODO: check of bool? == bool
+                setState(() {
+                  _isExpense = newValue;
+                });
+              }
+            },
           ),
           Align(
             alignment: Alignment.centerRight,
@@ -96,6 +111,8 @@ class NewBalanceItemRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // Statusbar fix: https://stackoverflow.com/questions/66511420/why-my-status-bar-icons-are-black-and-why-cant-i-change-it-after-flutter-2-0
+        brightness: Brightness.dark,
         title: Text(AppLocalizations.of(context)!.newBalanceItemTitle),
       ),
       body: Padding(
