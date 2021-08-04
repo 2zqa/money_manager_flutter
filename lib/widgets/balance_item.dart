@@ -23,7 +23,8 @@ class Income extends BalanceItem {
       : super(name, cost, recurringType);
 }
 
-enum SortingMethod { price, alphabet }
+// TODO: sort by next payment date
+enum SortingMethod { price, name }
 
 class BalanceItemListModel extends ChangeNotifier {
   /// Internal, private state of the cart.
@@ -38,19 +39,30 @@ class BalanceItemListModel extends ChangeNotifier {
     Expense("Extra kosten huis", 7500, RecurringType.daily),
   ];
 
+  BalanceItemListModel() {
+    // TODO: remove this along with dummy data
+    sortBy(this.sortingMethod);
+  }
+
+  SortingMethod sortingMethod = SortingMethod.price;
+
+  /// Sorts both lists by [sortingMethod].
+  /// TODO: add ascending/descending method
   void sortBy(SortingMethod sortingMethod) {
+    this.sortingMethod = sortingMethod;
     switch (sortingMethod) {
       case SortingMethod.price:
-        _expenseList.sort((a, b) => a.cost - b.cost);
-        _incomeList.sort((a, b) => a.cost - b.cost);
+        _expenseList.sort((a, b) => b.cost - a.cost);
+        _incomeList.sort((a, b) => b.cost - a.cost);
         break;
-      case SortingMethod.alphabet:
+      case SortingMethod.name:
         _expenseList.sort(
             (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         _incomeList.sort(
             (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         break;
     }
+    notifyListeners();
   }
 
   /// An unmodifiable view of the items in the cart.
@@ -75,14 +87,14 @@ class BalanceItemListModel extends ChangeNotifier {
   /// Adds [item] to to the list
   void addExpense(Expense item) {
     _expenseList.add(item);
-    // This call tells the widgets that are listening to this model to rebuild.
+    sortBy(this.sortingMethod);
     notifyListeners();
   }
 
   /// Adds [item] to to the list
   void addIncome(Income item) {
     _incomeList.add(item);
-    // This call tells the widgets that are listening to this model to rebuild.
+    sortBy(this.sortingMethod);
     notifyListeners();
   }
 

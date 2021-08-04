@@ -10,5 +10,8 @@
   "expenseItemNamePlaceholder": "e.g. Spotify",
   "incomeItemNamePlaceholder": "Salaris",
   "requiredFieldError": "Dit is een vereist veld",
-  "balanceItemAmountError": "Vul alsjeblieft een geldige hoeveelheid geld in"
+  "balanceItemAmountError": "Vul alsjeblieft een geldige hoeveelheid geld in",
+  "sortButtonDescription": "Sorteer",
+  "sortByName": "Naam",
+  "sortByPrice": "Prijs"
 }

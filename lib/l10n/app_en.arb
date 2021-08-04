@@ -46,5 +46,17 @@
   "requiredFieldError": "This is a required field",
   "@requiredFieldError": {
     "description": "Generic label for when a field is required"
+  },
+  "sortButtonDescription": "Sort",
+  "@sortButtonDescription": {
+    "description": "Label for the overview cards sorting button"
+  },
+  "sortByName": "Name",
+  "@sortByName": {
+    "description": "Sort overview cards by name"
+  },
+  "sortByPrice": "Price",
+  "@sortByPrice": {
+    "description": "Sort overview cards by price"
   }
 }

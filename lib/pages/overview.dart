@@ -13,6 +13,7 @@ class BalanceItemList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localeString = Localizations.localeOf(context).toLanguageTag();
+    // TODO use animatedlistview
     return ListView(
       padding: EdgeInsets.all(8.0),
       children: <Widget>[
@@ -60,6 +61,27 @@ class OverviewRoute extends StatelessWidget {
         // Statusbar fix: https://stackoverflow.com/questions/66511420/why-my-status-bar-icons-are-black-and-why-cant-i-change-it-after-flutter-2-0
         brightness: Brightness.dark,
         title: Text(AppLocalizations.of(context)!.title),
+        actions: <Widget>[
+          PopupMenuButton<SortingMethod>(
+            icon: Icon(Icons.sort),
+            tooltip: AppLocalizations.of(context)!.sortButtonDescription,
+            onSelected: (SortingMethod result) {
+              Provider.of<BalanceItemListModel>(context, listen: false)
+                  .sortBy(result);
+            },
+            itemBuilder: (BuildContext context) =>
+                <PopupMenuEntry<SortingMethod>>[
+              PopupMenuItem<SortingMethod>(
+                value: SortingMethod.name,
+                child: Text(AppLocalizations.of(context)!.sortByName),
+              ),
+              PopupMenuItem<SortingMethod>(
+                value: SortingMethod.price,
+                child: Text(AppLocalizations.of(context)!.sortByPrice),
+              ),
+            ],
+          )
+        ],
       ),
       body: Scrollbar(
         child: BalanceItemList(),
