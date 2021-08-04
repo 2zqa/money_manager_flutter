@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -22,9 +23,82 @@ class Income extends BalanceItem {
       : super(name, cost, recurringType);
 }
 
+enum SortingMethod { price, alphabet }
+
+class BalanceItemListModel extends ChangeNotifier {
+  /// Internal, private state of the cart.
+  final List<Income> _incomeList = [
+    Income("Duo", 25000, RecurringType.daily),
+    Income("Ouders", 10000, RecurringType.daily),
+    Income("Salaris", 200000, RecurringType.daily),
+  ];
+  final List<Expense> _expenseList = [
+    Expense("Spotify", 500, RecurringType.daily),
+    Expense("Huur", 30000, RecurringType.daily),
+    Expense("Extra kosten huis", 7500, RecurringType.daily),
+  ];
+
+  void sortBy(SortingMethod sortingMethod) {
+    switch (sortingMethod) {
+      case SortingMethod.price:
+        _expenseList.sort((a, b) => a.cost - b.cost);
+        _incomeList.sort((a, b) => a.cost - b.cost);
+        break;
+      case SortingMethod.alphabet:
+        _expenseList.sort(
+            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+        _incomeList.sort(
+            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+        break;
+    }
+  }
+
+  /// An unmodifiable view of the items in the cart.
+  UnmodifiableListView<Income> get incomeList =>
+      UnmodifiableListView(_incomeList);
+
+  UnmodifiableListView<Expense> get expenseList =>
+      UnmodifiableListView(_expenseList);
+
+  /// The current total price of all items (in cents, as always)
+  int get totalPrice {
+    int totalPrice = 0;
+    for (var income in _incomeList) {
+      totalPrice += income.cost;
+    }
+    for (var expense in _expenseList) {
+      totalPrice += expense.cost;
+    }
+    return totalPrice;
+  }
+
+  /// Adds [item] to to the list
+  void addExpense(Expense item) {
+    _expenseList.add(item);
+    // This call tells the widgets that are listening to this model to rebuild.
+    notifyListeners();
+  }
+
+  /// Adds [item] to to the list
+  void addIncome(Income item) {
+    _incomeList.add(item);
+    // This call tells the widgets that are listening to this model to rebuild.
+    notifyListeners();
+  }
+
+  /// Removes all items from the cart.
+  void removeAll() {
+    _incomeList.clear();
+    _expenseList.clear();
+    // This call tells the widgets that are listening to this model to rebuild.
+    notifyListeners();
+  }
+}
+
 // Widgets
 class HeadingItem extends StatelessWidget {
   final String heading;
+
   const HeadingItem({Key? key, required this.heading}) : super(key: key);
 
   @override

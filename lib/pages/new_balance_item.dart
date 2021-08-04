@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:money_manager_flutter/widgets/balance_item.dart';
+import 'package:provider/provider.dart';
 
 class NewBalanceItemForm extends StatefulWidget {
   @override
@@ -13,6 +15,16 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
   bool _isExpense = false;
 
   final _formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final amountController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    nameController.dispose();
+    amountController.dispose();
+    super.dispose();
+  }
 
   String _getCurrency(String locale) =>
       NumberFormat.compactSimpleCurrency(locale: locale).currencyName ?? "";
@@ -33,6 +45,7 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
         children: <Widget>[
           // Name
           TextFormField(
+            controller: nameController,
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
                 return al!.requiredFieldError;
@@ -48,6 +61,7 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
           ),
           // Amount
           TextFormField(
+            controller: amountController,
             validator: (value) {
               // Null check
               if (value == null || value.isEmpty) {
@@ -81,7 +95,6 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
             value: _isExpense,
             onChanged: (newValue) {
               if (newValue != null) {
-                // TODO: check of bool? == bool
                 setState(() {
                   _isExpense = newValue;
                 });
@@ -93,8 +106,27 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  print("Done!");
-                  Navigator.pop(context);
+                  String name = nameController.text.trim();
+                  // Since currentstate validate is true, we know we can safely parse the amount.
+                  int amount =
+                      (formatter.parse(amountController.text) * 100).toInt();
+
+                  var itemList =
+                      Provider.of<BalanceItemListModel>(context, listen: false);
+
+                  if (_isExpense) {
+                    var expense = Expense(name, amount, RecurringType.daily);
+                    itemList.addExpense(expense);
+                  } else {
+                    var income = Income(name, amount, RecurringType.daily);
+                    itemList.addIncome(income);
+                  }
+
+                  // Hide keyboard and close this route
+                  FocusScope.of(context).unfocus();
+                  Future.delayed(const Duration(milliseconds: 500), () {
+                    Navigator.pop(context);
+                  });
                 }
               },
               child: Text(AppLocalizations.of(context)!.addBalanceItem),

@@ -1,27 +1,48 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 import '../pages/new_balance_item.dart';
 import '../widgets/balance_item.dart';
 import '../widgets/transition_widget.dart';
 
 class BalanceItemList extends StatelessWidget {
-  final List<BalanceItem> balanceItemList;
-
-  const BalanceItemList({Key? key, required this.balanceItemList})
-      : super(key: key);
+  const BalanceItemList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (var balanceItem in balanceItemList)
-          BalanceItemCard(
-            balanceItem: balanceItem,
-            localeString: Localizations.localeOf(context).toLanguageTag(),
+    final localeString = Localizations.localeOf(context).toLanguageTag();
+    return ListView(
+      padding: EdgeInsets.all(8.0),
+      children: <Widget>[
+        HeadingItem(heading: AppLocalizations.of(context)!.expensesHeader),
+        Consumer<BalanceItemListModel>(
+          builder: (context, model, _) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (var expense in model.expenseList)
+                BalanceItemCard(
+                  balanceItem: expense,
+                  localeString: localeString,
+                ),
+            ],
           ),
+        ),
+        HeadingItem(heading: AppLocalizations.of(context)!.incomeHeader),
+        Consumer<BalanceItemListModel>(
+          builder: (context, model, _) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (var income in model.incomeList)
+                BalanceItemCard(
+                  balanceItem: income,
+                  localeString: localeString,
+                ),
+              // TODO add total money
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -41,29 +62,7 @@ class OverviewRoute extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.title),
       ),
       body: Scrollbar(
-        child: ListView(
-          padding: EdgeInsets.all(8.0),
-          children: <Widget>[
-            HeadingItem(heading: AppLocalizations.of(context)!.expensesHeader),
-            BalanceItemList(
-              balanceItemList: [
-                Expense("Spotify", 250, RecurringType.monthly),
-                Expense("Reddit", 900, RecurringType.monthly),
-                Expense("Reddit", 900, RecurringType.monthly),
-                Expense("Reddit", 900, RecurringType.monthly),
-                Expense("Reddit", 900, RecurringType.monthly),
-              ],
-            ),
-            HeadingItem(heading: AppLocalizations.of(context)!.incomeHeader),
-            BalanceItemList(
-              balanceItemList: [
-                Income("Salaris", 900001, RecurringType.monthly),
-                Income("Oma", 1000, RecurringType.yearly),
-                Income("Mammie", 200, RecurringType.yearly),
-              ],
-            ),
-          ],
-        ),
+        child: BalanceItemList(),
       ),
       floatingActionButton: CreateNewBalanceItemCardFAB(
         transitionType: transitionType,
