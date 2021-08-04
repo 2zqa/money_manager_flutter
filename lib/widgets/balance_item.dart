@@ -115,7 +115,10 @@ class HeadingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(heading, style: Theme.of(context).textTheme.headline5);
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Text(heading, style: Theme.of(context).textTheme.headline5),
+    );
   }
 }
 
