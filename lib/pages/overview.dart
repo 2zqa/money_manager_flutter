@@ -73,12 +73,12 @@ class OverviewRoute extends StatelessWidget {
             itemBuilder: (BuildContext context) =>
                 <PopupMenuEntry<SortingMethod>>[
               PopupMenuItem<SortingMethod>(
-                value: SortingMethod.name,
-                child: Text(AppLocalizations.of(context)!.sortByName),
-              ),
-              PopupMenuItem<SortingMethod>(
                 value: SortingMethod.price,
                 child: Text(AppLocalizations.of(context)!.sortByPrice),
+              ),
+              PopupMenuItem<SortingMethod>(
+                value: SortingMethod.name,
+                child: Text(AppLocalizations.of(context)!.sortByName),
               ),
             ],
           )
