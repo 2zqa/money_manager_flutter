@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../pages/new_balance_item.dart';
 import '../widgets/balance_item.dart';
 import '../widgets/transition_widget.dart';
+import '../widgets/heading_item.dart';
 
 class BalanceItemList extends StatelessWidget {
   const BalanceItemList({Key? key}) : super(key: key);
