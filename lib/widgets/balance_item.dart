@@ -115,9 +115,19 @@ class HeadingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: Text(heading, style: Theme.of(context).textTheme.headline5),
+    return Container(
+      height: 48,
+      padding: const EdgeInsets.only(left: 20.0),
+      child: Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: Text(
+          heading,
+          // https://material.io/archive/guidelines/components/subheaders.html#subheaders-list-subheaders
+          style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                color: Theme.of(context).textTheme.caption?.color,
+              ),
+        ),
+      ),
     );
   }
 }

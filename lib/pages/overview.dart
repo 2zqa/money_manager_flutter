@@ -15,7 +15,7 @@ class BalanceItemList extends StatelessWidget {
     final localeString = Localizations.localeOf(context).toLanguageTag();
     // TODO use animatedlistview
     return ListView(
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.only(left: 8, right: 8),
       children: <Widget>[
         HeadingItem(heading: AppLocalizations.of(context)!.expensesHeader),
         Consumer<BalanceItemListModel>(
