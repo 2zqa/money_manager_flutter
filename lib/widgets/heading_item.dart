@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class HeadingItem extends StatelessWidget {
-  final String heading;
 
   const HeadingItem({Key? key, required this.heading}) : super(key: key);
+
+  final String heading;
 
   @override
   Widget build(BuildContext context) {

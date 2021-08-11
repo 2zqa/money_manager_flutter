@@ -5,25 +5,25 @@ import 'package:provider/provider.dart';
 
 import '../pages/new_balance_item.dart';
 import '../widgets/balance_item.dart';
-import '../widgets/transition_widget.dart';
 import '../widgets/heading_item.dart';
+import '../widgets/transition_widget.dart';
 
 class BalanceItemList extends StatelessWidget {
   const BalanceItemList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final localeString = Localizations.localeOf(context).toLanguageTag();
-    // TODO use animatedlistview
+    final String localeString = Localizations.localeOf(context).toLanguageTag();
+    // TODO: use animatedlistview
     return ListView(
-      padding: EdgeInsets.only(left: 8, right: 8),
+      padding: const EdgeInsets.only(left: 8, right: 8),
       children: <Widget>[
         HeadingItem(heading: AppLocalizations.of(context)!.expensesHeader),
         Consumer<BalanceItemListModel>(
-          builder: (context, model, _) => Column(
+          builder: (BuildContext context, BalanceItemListModel model, _) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (var expense in model.expenseList)
+            children: <BalanceItemCard>[
+              for (Expense expense in model.expenseList)
                 BalanceItemCard(
                   balanceItem: expense,
                   localeString: localeString,
@@ -33,10 +33,10 @@ class BalanceItemList extends StatelessWidget {
         ),
         HeadingItem(heading: AppLocalizations.of(context)!.incomeHeader),
         Consumer<BalanceItemListModel>(
-          builder: (context, model, _) => Column(
+          builder: (BuildContext context, BalanceItemListModel model, _) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (var income in model.incomeList)
+            children: <BalanceItemCard>[
+              for (Income income in model.incomeList)
                 BalanceItemCard(
                   balanceItem: income,
                   localeString: localeString,
@@ -51,9 +51,10 @@ class BalanceItemList extends StatelessWidget {
 }
 
 class OverviewRoute extends StatelessWidget {
-  final transitionType = ContainerTransitionType.fade;
 
   const OverviewRoute({Key? key}) : super(key: key);
+
+  static const ContainerTransitionType _transitionType = ContainerTransitionType.fade;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +65,7 @@ class OverviewRoute extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.title),
         actions: <Widget>[
           PopupMenuButton<SortingMethod>(
-            icon: Icon(Icons.sort),
+            icon: const Icon(Icons.sort),
             tooltip: AppLocalizations.of(context)!.sortButtonDescription,
             onSelected: (SortingMethod result) {
               Provider.of<BalanceItemListModel>(context, listen: false)
@@ -84,12 +85,12 @@ class OverviewRoute extends StatelessWidget {
           )
         ],
       ),
-      body: Scrollbar(
+      body: const Scrollbar(
         child: BalanceItemList(),
       ),
-      floatingActionButton: CreateNewBalanceItemCardFAB(
-        transitionType: transitionType,
-        route: const NewBalanceItemRoute(),
+      floatingActionButton: const CreateNewBalanceItemCardFAB(
+        transitionType: _transitionType,
+        route: NewBalanceItemRoute(),
       ),
     );
   }

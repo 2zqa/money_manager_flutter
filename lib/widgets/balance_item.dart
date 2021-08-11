@@ -6,11 +6,11 @@ import 'package:intl/intl.dart';
 enum RecurringType { daily, weekly, fortnightly, monthly, yearly }
 
 abstract class BalanceItem {
+  BalanceItem(this.name, this.cost, this.recurringType);
+
   String name;
   int cost;
   RecurringType recurringType;
-
-  BalanceItem(this.name, this.cost, this.recurringType);
 }
 
 class Expense extends BalanceItem {
@@ -27,22 +27,21 @@ class Income extends BalanceItem {
 enum SortingMethod { price, name }
 
 class BalanceItemListModel extends ChangeNotifier {
-  /// Internal, private state of the cart.
-  final List<Income> _incomeList = [
-    Income("Duo", 25000, RecurringType.daily),
-    Income("Ouders", 10000, RecurringType.daily),
-    Income("Salaris", 200000, RecurringType.daily),
-  ];
-  final List<Expense> _expenseList = [
-    Expense("Spotify", 500, RecurringType.daily),
-    Expense("Huur", 30000, RecurringType.daily),
-    Expense("Extra kosten huis", 7500, RecurringType.daily),
-  ];
-
   BalanceItemListModel() {
     // TODO: remove this along with dummy data
-    sortBy(this.sortingMethod);
+    sortBy(sortingMethod);
   }
+
+  final List<Income> _incomeList = <Income>[
+    Income('Duo', 25000, RecurringType.daily),
+    Income('Ouders', 10000, RecurringType.daily),
+    Income('Salaris', 200000, RecurringType.daily),
+  ];
+  final List<Expense> _expenseList = <Expense>[
+    Expense('Spotify', 500, RecurringType.daily),
+    Expense('Huur', 30000, RecurringType.daily),
+    Expense('Extra kosten huis', 7500, RecurringType.daily),
+  ];
 
   SortingMethod sortingMethod = SortingMethod.price;
 
@@ -52,14 +51,14 @@ class BalanceItemListModel extends ChangeNotifier {
     this.sortingMethod = sortingMethod;
     switch (sortingMethod) {
       case SortingMethod.price:
-        _expenseList.sort((a, b) => b.cost - a.cost);
-        _incomeList.sort((a, b) => b.cost - a.cost);
+        _expenseList.sort((Expense a, Expense b) => b.cost - a.cost);
+        _incomeList.sort((Income a, Income b) => b.cost - a.cost);
         break;
       case SortingMethod.name:
-        _expenseList.sort(
-            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-        _incomeList.sort(
-            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+        _expenseList.sort((Expense a, Expense b) =>
+            a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+        _incomeList.sort((Income a, Income b) =>
+            a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         break;
     }
     notifyListeners();
@@ -67,18 +66,18 @@ class BalanceItemListModel extends ChangeNotifier {
 
   /// An unmodifiable view of the items in the cart.
   UnmodifiableListView<Income> get incomeList =>
-      UnmodifiableListView(_incomeList);
+      UnmodifiableListView<Income>(_incomeList);
 
   UnmodifiableListView<Expense> get expenseList =>
-      UnmodifiableListView(_expenseList);
+      UnmodifiableListView<Expense>(_expenseList);
 
   /// The current total price of all items (in cents, as always)
   int get totalPrice {
     int totalPrice = 0;
-    for (var income in _incomeList) {
+    for (final Income income in _incomeList) {
       totalPrice += income.cost;
     }
-    for (var expense in _expenseList) {
+    for (final Expense expense in _expenseList) {
       totalPrice += expense.cost;
     }
     return totalPrice;
@@ -87,14 +86,14 @@ class BalanceItemListModel extends ChangeNotifier {
   /// Adds [item] to to the list
   void addExpense(Expense item) {
     _expenseList.add(item);
-    sortBy(this.sortingMethod);
+    sortBy(sortingMethod);
     notifyListeners();
   }
 
   /// Adds [item] to to the list
   void addIncome(Income item) {
     _incomeList.add(item);
-    sortBy(this.sortingMethod);
+    sortBy(sortingMethod);
     notifyListeners();
   }
 
@@ -109,17 +108,17 @@ class BalanceItemListModel extends ChangeNotifier {
 
 // Widgets
 class BalanceItemCard extends StatelessWidget {
+  /// A visual representation of a [BalanceItem].
+  /// Therefore, it requires one (duh).
+  const BalanceItemCard(
+      {required this.balanceItem, required this.localeString, Key? key})
+      : super(key: key);
+
   final BalanceItem balanceItem;
   final String localeString;
 
   String _formatMoney(String localeString, int cents) =>
       NumberFormat.simpleCurrency(locale: localeString).format(cents / 100);
-
-  /// A visual representation of a [BalanceItem].
-  /// Therefore, it requires one (duh)
-  const BalanceItemCard(
-      {required this.balanceItem, required this.localeString, Key? key})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -133,11 +132,9 @@ class BalanceItemCard extends StatelessWidget {
         },
         child: ListTile(
           leading: Icon(
-            this.balanceItem is Income
-                ? Icons.arrow_upward
-                : Icons.arrow_downward,
+            balanceItem is Income ? Icons.arrow_upward : Icons.arrow_downward,
           ),
-          title: Text(this.balanceItem.name),
+          title: Text(balanceItem.name),
           subtitle: Text(_formatMoney(localeString, balanceItem.cost)),
         ),
       ),

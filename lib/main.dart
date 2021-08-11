@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:money_manager_flutter/widgets/balance_item.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/overview.dart';
+import 'widgets/balance_item.dart';
 
 void main() {
-  //TODO check whether this is scope pollution
-  runApp(ChangeNotifierProvider(
-    create: (context) => BalanceItemListModel(),
+  runApp(ChangeNotifierProvider<BalanceItemListModel>(
+    create: (BuildContext context) => BalanceItemListModel(),
     child: MoneyManagerApp(),
   ));
 }
 
+/// The main widget that gets run from [main].
 class MoneyManagerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class MoneyManagerApp extends StatelessWidget {
       ),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.system,
-      home: OverviewRoute(),
+      home: const OverviewRoute(),
     );
   }
 }

@@ -1,29 +1,34 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
-const double fabSize = 56;
-
+/// sdfg
 class CreateNewBalanceItemCardFAB extends StatelessWidget {
-  final ContainerTransitionType transitionType;
-  final Widget route;
 
+  /// asdf
   const CreateNewBalanceItemCardFAB(
-      {Key? key, required this.transitionType, required this.route})
-      : super(key: key);
+      {Key? key, required ContainerTransitionType transitionType, required Widget route})
+      : _transitionType = transitionType,
+        _route = route,
+        super(key: key);
+
+  static const double _fabSize = 56;
+  final ContainerTransitionType _transitionType;
+  final Widget _route;
 
   @override
   Widget build(BuildContext context) => OpenContainer(
-        openBuilder: (context, _) => route,
-        closedShape: CircleBorder(),
+        transitionType: _transitionType,
+        closedShape: const CircleBorder(),
         closedColor: Theme.of(context).primaryColor,
-        closedBuilder: (context, openContainer) => Container(
+        openBuilder: (BuildContext context, _) => _route,
+        closedBuilder: (BuildContext context, _) => Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: Theme.of(context).primaryColor,
           ),
-          height: fabSize,
-          width: fabSize,
-          child: Icon(Icons.add, color: Colors.white),
+          height: _fabSize,
+          width: _fabSize,
+          child: const Icon(Icons.add, color: Colors.white),
         ),
       );
 }
