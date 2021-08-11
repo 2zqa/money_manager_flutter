@@ -89,7 +89,7 @@ class OverviewRoute extends StatelessWidget {
       ),
       floatingActionButton: CreateNewBalanceItemCardFAB(
         transitionType: transitionType,
-        route: NewBalanceItemRoute(),
+        route: const NewBalanceItemRoute(),
       ),
     );
   }

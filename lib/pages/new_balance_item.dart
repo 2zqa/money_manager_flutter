@@ -139,6 +139,9 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
 }
 
 class NewBalanceItemRoute extends StatelessWidget {
+
+  const NewBalanceItemRoute({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,7 +151,7 @@ class NewBalanceItemRoute extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.newBalanceItemTitle),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: NewBalanceItemForm(),
       ),
     );
