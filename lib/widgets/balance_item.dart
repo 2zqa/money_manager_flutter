@@ -78,19 +78,24 @@ class BalanceItemListModel extends ChangeNotifier {
       totalPrice += income.cost;
     }
     for (final Expense expense in _expenseList) {
-      totalPrice += expense.cost;
+      totalPrice -= expense.cost;
     }
     return totalPrice;
   }
 
-  /// Adds [item] to to the list
+
+  bool get isNetPositive {
+    return totalPrice >= 0;
+  }
+
+  /// Adds [item] to the expenses.
   void addExpense(Expense item) {
     _expenseList.add(item);
     sortBy(sortingMethod);
     notifyListeners();
   }
 
-  /// Adds [item] to to the list
+  /// Adds [item] to the income list.
   void addIncome(Income item) {
     _incomeList.add(item);
     sortBy(sortingMethod);

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../pages/new_balance_item.dart';
 import '../widgets/balance_item.dart';
 import '../widgets/heading_item.dart';
+import '../widgets/total_money.dart';
 import '../widgets/transition_widget.dart';
 
 class BalanceItemList extends StatelessWidget {
@@ -45,6 +46,8 @@ class BalanceItemList extends StatelessWidget {
             ],
           ),
         ),
+        HeadingItem(heading: AppLocalizations.of(context)!.totalMoneyHeader),
+        const TotalMoney(),
       ],
     );
   }

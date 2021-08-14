@@ -2,6 +2,7 @@
   "title": "Geldbeheer",
   "expensesHeader": "Uitgaven",
   "incomeHeader": "Inkomsten",
+  "totalMoneyHeader": "Totaal",
   "newBalanceItemTitle": "Nieuw item",
   "balanceItemName": "Naam",
   "balanceItemAmount": "Hoeveelheid",

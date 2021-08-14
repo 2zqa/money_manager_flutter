@@ -11,6 +11,10 @@
   "@incomeHeader": {
     "description": "The header for income part on the overview screen"
   },
+  "totalMoneyHeader": "Total",
+  "@totalMoneyHeader": {
+    "description": "The header for the sum of all income and expenses in the overview screen"
+  },
   "newBalanceItemTitle": "New item",
   "@newBalanceItemTitle": {
     "description": "AppBar title when adding a new balance item"
