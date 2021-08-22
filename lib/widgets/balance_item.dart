@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 // Logic
 /// How often a payment occurs.
@@ -47,32 +49,90 @@ abstract class BalanceItem {
 class Expense extends BalanceItem {
   Expense(String name, int cost, RecurringType recurringType)
       : super(name, cost, recurringType);
+
+  @override
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'name': name,
+      'cost': cost,
+    };
+  }
 }
 
 class Income extends BalanceItem {
   Income(String name, int cost, RecurringType recurringType)
       : super(name, cost, recurringType);
+
+  @override
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'name': name,
+      'cost': cost,
+    };
+  }
 }
 
 // TODO: sort by next payment date
 enum SortingMethod { price, name }
 
+/// Model that handles keeping track of balance items and keeping the visual
+/// representation up-to-date. Balance items are saved in a SQL database and
+/// in lists.
 class BalanceItemListModel extends ChangeNotifier {
+  /// Creates the model.
   BalanceItemListModel() {
-    // TODO: remove this along with dummy data
-    sortBy(sortingMethod);
+    init();
   }
 
-  final List<Income> _incomeList = <Income>[
-    Income('Duo', 25000, RecurringType.daily),
-    Income('Ouders', 10000, RecurringType.daily),
-    Income('Salaris', 200000, RecurringType.daily),
-  ];
-  final List<Expense> _expenseList = <Expense>[
-    Expense('Spotify', 500, RecurringType.daily),
-    Expense('Huur', 30000, RecurringType.daily),
-    Expense('Extra kosten huis', 7500, RecurringType.daily),
-  ];
+  /// Reference to the database, used for storing balance items.
+  late final Database _database;
+
+  /// Initializes the database, creating two tables
+  /// and then running [populateFields].
+  Future<void> init() async {
+    return openDatabase(
+      join(await getDatabasesPath(), 'money_manager.db'),
+      onCreate: (Database db, int version) {
+        db.execute(
+          'CREATE TABLE income_items(id INTEGER PRIMARY KEY, name TEXT, cost INTEGER)',
+        );
+        db.execute(
+          'CREATE TABLE expense_items(id INTEGER PRIMARY KEY, name TEXT, cost INTEGER)',
+        );
+      },
+      version: 1,
+    ).then((Database db) => populateFields(db));
+  }
+
+  /// Populates the internal expense and income lists and the _database field.
+  Future<void> populateFields(Database db) async {
+    print(db);
+    _database = db;
+    final List<Map<String, dynamic>> expenseItemMap =
+        await _database.query('expense_items');
+    print(expenseItemMap);
+    final List<Map<String, dynamic>> incomeItemMap =
+        await _database.query('income_items');
+    print(incomeItemMap);
+
+    // Populate the iternal lists
+    for (final Map<String, dynamic> rawExpense in expenseItemMap) {
+      final String name = rawExpense['name'] as String;
+      final int cost = rawExpense['cost'] as int;
+      _expenseList.add(Expense(name, cost, RecurringType.daily));
+    }
+    for (final Map<String, dynamic> rawIncome in incomeItemMap) {
+      final String name = rawIncome['name'] as String;
+      final int cost = rawIncome['cost'] as int;
+      _incomeList.add(Income(name, cost, RecurringType.daily));
+    }
+    sortBy(sortingMethod);
+    notifyListeners();
+  }
+
+  /// Internal, private state of all income and expenses.
+  final List<Income> _incomeList = <Income>[];
+  final List<Expense> _expenseList = <Expense>[];
 
   /// The last used sorting method.
   SortingMethod sortingMethod = SortingMethod.price;
@@ -124,8 +184,24 @@ class BalanceItemListModel extends ChangeNotifier {
     return totalPrice;
   }
 
-  bool get isNetPositive {
-    return totalPrice >= 0;
+  bool get isNetPositive => totalPrice >= 0;
+
+  /// Adds an expense to the database, replacing if it already exists
+  Future<int> _addExpenseToDB(Expense item) async {
+    return _database.insert(
+      'expense_items',
+      item.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  /// Adds an income to the database, replacing if it already exists
+  Future<int> _addIncomeToDB(Income item) async {
+    return _database.insert(
+      'income_items',
+      item.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   /// Adds [item] to the expenses.
@@ -133,6 +209,7 @@ class BalanceItemListModel extends ChangeNotifier {
     _expenseList.add(item);
     sortBy(sortingMethod);
     notifyListeners();
+    _addExpenseToDB(item);
   }
 
   /// Adds [item] to the income list.
@@ -140,6 +217,7 @@ class BalanceItemListModel extends ChangeNotifier {
     _incomeList.add(item);
     sortBy(sortingMethod);
     notifyListeners();
+    _addIncomeToDB(item);
   }
 
   /// Removes all expenses and income.
