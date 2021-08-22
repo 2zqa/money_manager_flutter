@@ -3,13 +3,44 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 // Logic
-enum RecurringType { daily, weekly, fortnightly, monthly, yearly }
+/// How often a payment occurs.
+enum RecurringType {
+  /// Payment occurs daily.
+  daily,
 
+  /// Payment occurs weekly, on the same day every week. For example: Monday.
+  weekly,
+
+  /// Payment occurs every two weeks, on the same day every two weeks. For example: Thursday, but not the Thursday thereafter.
+  fortnightly,
+
+  /// Payment occurs monthly, on the same date every month. For example: 3rd of January, February, March, etc.
+  /// If date does not exist in month (for example, February 31th), it skips the payment.
+  monthly,
+
+  /// Payment occurs every year, on the same day. For example: The 200th day.
+  yearly,
+}
+
+/// An abstract balance item, which can be an income or an expense.
+/// Contains field related to recurring income or expenses.
+///
+/// See also:
+///  * [Income]
+///  * [Expense]
 abstract class BalanceItem {
+  /// Convert a BalanceItem into a Map. The keys must correspond to the names of
+  /// the columns in the database.
+  Map<String, dynamic> toMap();
+
   BalanceItem(this.name, this.cost, this.recurringType);
 
   String name;
+
+  /// The amount of money in cents.
   int cost;
+
+  /// How often the payment occurs. See: [RecurringType]
   RecurringType recurringType;
 }
 
@@ -43,6 +74,7 @@ class BalanceItemListModel extends ChangeNotifier {
     Expense('Extra kosten huis', 7500, RecurringType.daily),
   ];
 
+  /// The last used sorting method.
   SortingMethod sortingMethod = SortingMethod.price;
 
   /// Sorts both lists by [sortingMethod].
@@ -64,14 +96,23 @@ class BalanceItemListModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// An unmodifiable view of the items in the cart.
+  /// An unmodifiable view of all income items.
+  /// Can be interated over for visual representations.
+  ///
+  /// See also:
+  ///  * [expenseList]
   UnmodifiableListView<Income> get incomeList =>
       UnmodifiableListView<Income>(_incomeList);
 
+  /// An unmodifiable view of all expenses.
+  /// Can be interated over for visual representations.
+  ///
+  /// See also:
+  ///  * [incomeList]
   UnmodifiableListView<Expense> get expenseList =>
       UnmodifiableListView<Expense>(_expenseList);
 
-  /// The current total price of all items (in cents, as always)
+  /// The current total price of all items (in cents, as always).
   int get totalPrice {
     int totalPrice = 0;
     for (final Income income in _incomeList) {
@@ -82,7 +123,6 @@ class BalanceItemListModel extends ChangeNotifier {
     }
     return totalPrice;
   }
-
 
   bool get isNetPositive {
     return totalPrice >= 0;
@@ -102,7 +142,7 @@ class BalanceItemListModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Removes all items from the cart.
+  /// Removes all expenses and income.
   void removeAll() {
     _incomeList.clear();
     _expenseList.clear();
@@ -115,11 +155,18 @@ class BalanceItemListModel extends ChangeNotifier {
 class BalanceItemCard extends StatelessWidget {
   /// A visual representation of a [BalanceItem].
   /// Therefore, it requires one (duh).
+  ///
+  /// The [localeString] is used to display the correct currency
+  /// and to format the number the way the locale prescribes.
   const BalanceItemCard(
       {required this.balanceItem, required this.localeString, Key? key})
       : super(key: key);
 
+  /// The balanceItem this represents.
   final BalanceItem balanceItem;
+
+  /// The locale that is used to display the correct currency
+  /// and to format the number the way this describes
   final String localeString;
 
   String _formatMoney(String localeString, int cents) =>
