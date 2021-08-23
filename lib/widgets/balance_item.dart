@@ -1,4 +1,5 @@
 import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
@@ -106,14 +107,14 @@ class BalanceItemListModel extends ChangeNotifier {
 
   /// Populates the internal expense and income lists and the _database field.
   Future<void> populateFields(Database db) async {
-    print(db);
+    // Save the db parameter in object
     _database = db;
+
+    // Query items from database
     final List<Map<String, dynamic>> expenseItemMap =
         await _database.query('expense_items');
-    print(expenseItemMap);
     final List<Map<String, dynamic>> incomeItemMap =
         await _database.query('income_items');
-    print(incomeItemMap);
 
     // Populate the iternal lists
     for (final Map<String, dynamic> rawExpense in expenseItemMap) {
