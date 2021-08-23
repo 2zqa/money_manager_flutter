@@ -18,16 +18,18 @@ class CreateNewBalanceItemCardFAB extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color transitionColor = Theme.of(context).scaffoldBackgroundColor;
+    final Color transitionColor = Theme.of(context).accentColor;
     return OpenContainer(
       transitionType: _transitionType,
       openColor: transitionColor,
       middleColor: transitionColor,
       closedColor: transitionColor,
       closedShape: const CircleBorder(),
+      closedElevation: 6,
       openBuilder: (BuildContext context, _) => _route,
       closedBuilder: (BuildContext context, VoidCallback openContainer) {
         return FloatingActionButton(
+          elevation: 0,
           onPressed: () => openContainer(),
           child: const Icon(Icons.add),
         );
