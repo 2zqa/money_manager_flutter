@@ -30,6 +30,11 @@ class CreateNewBalanceItemCardFAB extends StatelessWidget {
       closedBuilder: (BuildContext context, VoidCallback openContainer) {
         return FloatingActionButton(
           elevation: 0,
+          // Rendering a circle in a circle with the same size
+          // gives some minor artifacts around the edges.
+          // Also, contrary to the name, a roundedrectangleborder
+          // without parameters is just a regular rectangle.
+          shape: RoundedRectangleBorder(),
           onPressed: () => openContainer(),
           child: const Icon(Icons.add),
         );
