@@ -12,12 +12,14 @@ import 'widgets/balance_item.dart';
 void main() {
   runApp(ChangeNotifierProvider<BalanceItemListModel>(
     create: (BuildContext context) => BalanceItemListModel(),
-    child: MoneyManagerApp(),
+    child: const MoneyManagerApp(),
   ));
 }
 
 /// The main widget that gets run from [main].
 class MoneyManagerApp extends StatelessWidget {
+  const MoneyManagerApp({super.key});
+
   /// Creates a swatch from a [color]. The primary color shade can be defined
   /// with [primaryShade], which should be a [MaterialColor] shade (for example: 200)
   MaterialColor swatchify(MaterialColor color, {int primaryShade = 500}) {
@@ -48,7 +50,6 @@ class MoneyManagerApp extends StatelessWidget {
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: swatchify(Colors.green, primaryShade: 200),
-        accentColor: Colors.green.shade200,
       ),
       themeMode: ThemeMode.system,
       home: const OverviewRoute(),

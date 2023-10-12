@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import '../widgets/balance_item.dart';
 
 class NewBalanceItemForm extends StatefulWidget {
+  const NewBalanceItemForm({super.key});
+
   @override
   NewBalanceItemFormState createState() {
     return NewBalanceItemFormState();
@@ -36,7 +38,8 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
     final String languageTag = Localizations.localeOf(context).toLanguageTag();
     final NumberFormat formatter =
         NumberFormat.currency(decimalDigits: 2, locale: languageTag);
-    final NumberFormat placeholderFormatter = NumberFormat('#,##0.00', languageTag);
+    final NumberFormat placeholderFormatter =
+        NumberFormat('#,##0.00', languageTag);
     // Use wrap so spacing is available
     return Form(
       key: _formKey,
@@ -49,12 +52,12 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
             controller: nameController,
             validator: (String? value) {
               if (value == null || value.trim().isEmpty) {
-                return al!.requiredFieldError;
+                return al.requiredFieldError;
               }
               return null;
             },
             decoration: InputDecoration(
-              labelText: al!.balanceItemName + '*',
+              labelText: '${al!.balanceItemName}*',
               hintText: al.expenseItemNamePlaceholder,
               filled: true,
               border: const UnderlineInputBorder(),
@@ -81,7 +84,7 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
             },
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)!.balanceItemAmount + '*',
+              labelText: '${AppLocalizations.of(context)!.balanceItemAmount}*',
               hintText: placeholderFormatter.format(0),
               filled: true,
               border: const UnderlineInputBorder(),
@@ -116,10 +119,12 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
                       Provider.of<BalanceItemListModel>(context, listen: false);
 
                   if (_isExpense) {
-                    final Expense expense = Expense(name, amount, RecurringType.daily);
+                    final Expense expense =
+                        Expense(name, amount, RecurringType.daily);
                     itemList.addExpense(expense);
                   } else {
-                    final Income income = Income(name, amount, RecurringType.daily);
+                    final Income income =
+                        Income(name, amount, RecurringType.daily);
                     itemList.addIncome(income);
                   }
 
@@ -140,7 +145,6 @@ class NewBalanceItemFormState extends State<NewBalanceItemForm> {
 }
 
 class NewBalanceItemRoute extends StatelessWidget {
-
   const NewBalanceItemRoute({Key? key}) : super(key: key);
 
   @override
@@ -148,11 +152,10 @@ class NewBalanceItemRoute extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         // Statusbar fix: https://stackoverflow.com/questions/66511420/why-my-status-bar-icons-are-black-and-why-cant-i-change-it-after-flutter-2-0
-        brightness: Brightness.dark,
         title: Text(AppLocalizations.of(context)!.newBalanceItemTitle),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      body: const Padding(
+        padding: EdgeInsets.all(16),
         child: NewBalanceItemForm(),
       ),
     );

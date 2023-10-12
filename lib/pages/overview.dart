@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -64,7 +65,6 @@ class OverviewRoute extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         // Statusbar fix: https://stackoverflow.com/questions/66511420/why-my-status-bar-icons-are-black-and-why-cant-i-change-it-after-flutter-2-0
-        brightness: Brightness.dark,
         title: Text(AppLocalizations.of(context)!.title),
         actions: <Widget>[
           PopupMenuButton<SortingMethod>(
@@ -86,7 +86,7 @@ class OverviewRoute extends StatelessWidget {
               ),
             ],
           )
-        ],
+        ], systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: const Scrollbar(
         child: BalanceItemList(),

@@ -18,7 +18,7 @@ class CreateNewBalanceItemCardFAB extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color transitionColor = Theme.of(context).accentColor;
+    final Color transitionColor = Theme.of(context).colorScheme.secondary;
     return OpenContainer(
       transitionType: _transitionType,
       openColor: transitionColor,
@@ -34,7 +34,7 @@ class CreateNewBalanceItemCardFAB extends StatelessWidget {
           // gives some minor artifacts around the edges.
           // Also, contrary to the name, a roundedrectangleborder
           // without parameters is just a regular rectangle.
-          shape: RoundedRectangleBorder(),
+          shape: const RoundedRectangleBorder(),
           onPressed: () => openContainer(),
           child: const Icon(Icons.add),
         );
