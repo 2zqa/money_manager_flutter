@@ -1,6 +1,4 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -8,7 +6,6 @@ import '../pages/new_balance_item.dart';
 import '../widgets/balance_item.dart';
 import '../widgets/heading_item.dart';
 import '../widgets/total_money.dart';
-import '../widgets/transition_widget.dart';
 
 class BalanceItemList extends StatelessWidget {
   const BalanceItemList({Key? key}) : super(key: key);
@@ -22,7 +19,8 @@ class BalanceItemList extends StatelessWidget {
       children: <Widget>[
         HeadingItem(heading: AppLocalizations.of(context)!.expensesHeader),
         Consumer<BalanceItemListModel>(
-          builder: (BuildContext context, BalanceItemListModel model, _) => Column(
+          builder: (BuildContext context, BalanceItemListModel model, _) =>
+              Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <BalanceItemCard>[
               for (Expense expense in model.expenseList)
@@ -35,7 +33,8 @@ class BalanceItemList extends StatelessWidget {
         ),
         HeadingItem(heading: AppLocalizations.of(context)!.incomeHeader),
         Consumer<BalanceItemListModel>(
-          builder: (BuildContext context, BalanceItemListModel model, _) => Column(
+          builder: (BuildContext context, BalanceItemListModel model, _) =>
+              Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <BalanceItemCard>[
               for (Income income in model.incomeList)
@@ -55,16 +54,12 @@ class BalanceItemList extends StatelessWidget {
 }
 
 class OverviewRoute extends StatelessWidget {
-
   const OverviewRoute({Key? key}) : super(key: key);
-
-  static const ContainerTransitionType _transitionType = ContainerTransitionType.fade;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Statusbar fix: https://stackoverflow.com/questions/66511420/why-my-status-bar-icons-are-black-and-why-cant-i-change-it-after-flutter-2-0
         title: Text(AppLocalizations.of(context)!.title),
         actions: <Widget>[
           PopupMenuButton<SortingMethod>(
@@ -86,14 +81,19 @@ class OverviewRoute extends StatelessWidget {
               ),
             ],
           )
-        ], systemOverlayStyle: SystemUiOverlayStyle.light,
+        ],
       ),
       body: const Scrollbar(
         child: BalanceItemList(),
       ),
-      floatingActionButton: const CreateNewBalanceItemCardFAB(
-        transitionType: _transitionType,
-        route: NewBalanceItemRoute(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const NewBalanceItemRoute()),
+          );
+        },
+        child: const Icon(Icons.add_outlined),
       ),
     );
   }
