@@ -1,3 +1,6 @@
+> [!WARNING]
+> This project is archived. I recommend using [oinkoin](https://github.com/emavgl/oinkoin).
+
 # <img src="/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" height="32px" width="32px" alt="App icon"></img> Money Manager
 
 [![Build and release APKs](https://github.com/2zqa/money_manager_flutter/actions/workflows/build_and_release.yml/badge.svg)](https://github.com/2zqa/money_manager_flutter/actions/workflows/build_and_release.yml)
